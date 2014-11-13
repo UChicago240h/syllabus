@@ -2,6 +2,15 @@
 ## Haskell
 As all Haskell courses begin, so does this one: with the most banal description of the language possible. **Haskell is a lazy pure functional language.** What this means, I'm assuming most of you know already: if you don't, this course is probably not for you. At the highest level, this means that Haskell is very, very, very different from most programming languages that you have worked with previously. We'll get into the details of the weirdness in a bit, with much of it hopefully being familiar.
 
+## Today's Goals
+Much of this first week is concerned with covering the groundwork necessary to understand the more advanced topics in class. We're making the assumption that folks here are familiar with Haskell and need no more than a refresher, so much of the material is going to be covered in a cursory fashion and a very rapid speed.
+
+## Beginning with GHC(i)
+Our base of operations in the Haskell world is going to be the Glasgow Haskell Compiler (GHC). While there are other Haskell compilers out there, GHC is the standard and the only thing you should ever touch. Initially, as we're experimenting and refamiliarizing ourselves with the language, we're going to spend a significant amount of time in GHCi, the interpreter facility of GHC. For readers of the notes, I've denoted lines of code to be executed within GHCi as preceded by `>` and output in GHCi with `>>>`.
+
+Let's begin by mucking about and defining some variables:
+
+
 ## Immutable Variable
 ```haskell
 let rate = 10
@@ -53,6 +62,10 @@ Types are something that beginning Haskellians spend a lot of time initially str
 ## If/Then
 
 ## Where/Let Clauses
+
+## Recursion
+
+## Zip
 
 ## Map
 
