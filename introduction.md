@@ -66,30 +66,19 @@ This is mysterious. By simply removing the type signature, something that we've 
 > :t getArea
 >>> getArea :: Num a => a -> a -> a
 ```
-Interesting. The interpreter has assessed the type of our function to be quite different from what initially profiled it as. The core is the same: you're working with a function taking in two arguments of the same type and returning an argument of the same type: `a -> a -> a`. But while our previous types were strictly defined as integers, GHCi has has reprofiled these types as generics. The only restriction upon these types is denoted by `Num a =>`, which means that all of these variables must be of the `Num` typeclass (more on these later)
-
-As we can see here, we've generated a function that goes about taking in two variables and outputting the product, masquerading as a distance-calculating function. The interesting part here the line `:t distanceTraveled`. This tells GHCi to output the type of the given function. We've given the interpreter limited information about the types of the initial inputs, as we can see from the type signature `a -> a -> a`. As expected from a basic type system, this tells that we have a function taking in two variables, both of some generic type 'a', and outputs a data value of type 'a'. The interesting part is the type binding `Num a =>`. What has happened here is that the Haskell interpreter has detected that the type binding must be able to perform the `*` operation. The interpreter knows that any types conforming to the `*` operation must by part of the `Num` typeclass.
-
-Haskell's type system is extremely powerful and very strict. While in Python, you're free to run willy-nilly with duck-typing, Haskell is a bit more strict when it comes to this. To see this, let's take a look at a degenerate example:
+Interesting. The interpreter has assessed the type of our function to be quite different from what initially profiled it as. The core is the same: you're working with a function taking in two arguments of the same type and returning an argument of the same type: `a -> a -> a`. But while our previous types were strictly defined as integers, GHCi has has reprofiled these types as generics. The only restriction upon these types is denoted by `Num a =>`, which means that all of these variables must be of the `Num` typeclass (more on these later). This means that all types that could be considered numbers and obey certain laws that the Haskell compiler places upon Nums are admissible in both the arguments and ouput. We can go ahead and use this information to amend our previous function defintion:
 ```haskell
-
+-- area.hs
+getArea :: Num a => a -> a -> a
+getArea width height = width * height
 ```
-Let's try to run this bad boy:
+Let's load this and make sure it works:
 ```haskell
-:l distance.hs
-getDistance 8.0 34
+> :l area.hs
+> getArea 2.0 4
+>>> 20.0
 ```
-This causes the compiler to throw a fit, complaining that 8.0 is not an instance of `Int`, as it epxects. We can quite easily fix this by killing the type signature and allowing the compiler to generate a generic type signature for us:
-```haskell
-getDistance speed time = speed * time
-
-:l distance.hs
-getDistance 8.0 34
->> 272.0
-:t getDistance
->> Num a => a -> a -> a
-```
-Types are something that beginning Haskellians spend a lot of time initially struggling with. Learn them, learn them well.
+Awesome. There's plenty more to be said for this example, but we'll leave it as is for the time being. Types are something that beginning Haskellians spend a lot of time initially struggling with, so do invest the time in understanding and learning how to compose them.
 
 ## Typeclasses
 
