@@ -35,32 +35,36 @@ Note that function invocation, as opposed to what most of us are used to from Al
 Very cool. Just a quick word about GHCi before we go any further: the `let` keyword has a very different meaning in GHCi and in proper Haskell. In GHCi, we use `let` to define bindings that remain within the interpreter's scope for the duration of the session. We use this for both variables and functions. In proper Haskell, `let` is used in a very different way to denote local name bindings. We'll cover this latter use in a bit.
 
 ## Types
-Haskell's type system is simultaneously its most powerful and most irritating feature. Type safety allows us to write hugely robust programs, but often at the expense of accessibility. If you have not already, you will spend a significant amount of time tearing your hair out over type signatures. Let's take begin previous example, which we'll put in a file called *area.hs* (Note the lack of `let` bindings):
+Haskell's type system is simultaneously its most powerful and most irritating feature. Type safety allows us to write hugely robust programs, but often at the expense of accessibility to n00bz. If you have not already, you will spend a significant amount of time tearing your hair out over type signatures. Let's take begin previous example, which we'll put in a file called *area.hs*:
 ```haskell
 getArea :: Int -> Int -> Int
 getArea width height = width * height
 ```
-Now let's load this file into GHCi and give it a whirl:
+Here we've defined the getArea function as before, but with the addition of a type signature. Type signatures provide an explicit type restrictions for function inputs and outputs. While the compiler can usually infer types for basic functions, type signatures provide an added layer readability for folks reading your code down the road and are critical for more advaned programs. They can also become a huge liability if not done properly. Let's load this file into GHCi and give it a whirl:
 ```haskell
 > :l area.hs
 > getArea 4 5
 >>> 20
 ```
-This works as before
-## Immutable Variable
+This works as before, but the limitations of what we've written become apparent very quickly:
 ```haskell
-let rate = 10
-let time = 20
-let distance = rate * time
-distance
+> getArea 4.0 8
+>>> INCOMPREHENSIBLE ERROR MESSAGE
 ```
-Much as we can define variables, we can define the core unit of any given functional language, i.e. functions:
+This is obviously not something we want. It should only make sense that our `getArea` function should be able to handle floating point numbers, but we've defined our function signature to handle only integers. To fix this issue, let's try removing method signature and reloading our function:
 ```haskell
-let distanceTraveled speed time = speed * time
-:t distanceTraveled
->> distanceTraveled :: Num a => a -> a -> a
-distanceTraveled 20 100
+-- area.hs
+getArea width height = width * height
 ```
+```haskell
+> :l area.hs
+> getArea 4 5.0
+>>> 20.0
+```
+This is mysterious. By simply removing the type signature, something that we've created a function that works on previously failing data types and is somehow more robust than our previous, virtually identical function. Let's investigate why
+```haskell
+```
+
 As we can see here, we've generated a function that goes about taking in two variables and outputting the product, masquerading as a distance-calculating function. The interesting part here the line `:t distanceTraveled`. This tells GHCi to output the type of the given function. We've given the interpreter limited information about the types of the initial inputs, as we can see from the type signature `a -> a -> a`. As expected from a basic type system, this tells that we have a function taking in two variables, both of some generic type 'a', and outputs a data value of type 'a'. The interesting part is the type binding `Num a =>`. What has happened here is that the Haskell interpreter has detected that the type binding must be able to perform the `*` operation. The interpreter knows that any types conforming to the `*` operation must by part of the `Num` typeclass.
 
 Haskell's type system is extremely powerful and very strict. While in Python, you're free to run willy-nilly with duck-typing, Haskell is a bit more strict when it comes to this. To see this, let's take a look at a degenerate example:
