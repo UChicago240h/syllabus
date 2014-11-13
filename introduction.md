@@ -38,8 +38,26 @@ getDistance 8.0 34
 :t getDistance
 >> Num a => a -> a -> a
 ```
+Types are something that beginning Haskellians spend a lot of time initially struggling with. Learn them, learn them well.
 
-## Immutable State
+## Typeclasses
+
+## Pattern Matching
+
+## List Comprehensions
+
+## Guards
+
+## Cases
+
+## If/Then
+
+## Where/Let Clauses
+
+## Map
+
+## Fold
+
 
 ## Why Haskell?
 With most Computer Science courses, the reason for taking it is generally fairly obvious: Why take Databases, Networks, Operating Systems, or Parallel Programming? Because these are the fundamental building blocks of systems programming. Why take Discrete Math and Algorithms? Because you need to know the fundamentals of reasoning about program runtime and performance. Why take Complexity? Because you need to graduate. But with a topic this seemingly esoteric, it is probably worthwhile to take a moment and think about why we're doing this.
