@@ -25,12 +25,28 @@ Works much as expected: nothing new to see here. More interesting is where we st
 ```
 Note that function invocation, as opposed to what most of us are used to from Algol-family languages, does not depend upon the use of parentheses, but properly-spaced function names followed by arguments. Let's go about and define a couple of slightly more robust functions:
 ```haskell
-> isLong name = (length name) > 10
+> let isLong name = (length name) > 10
 > isLong "Jakub"
 >>> False
 > isLong "Balthazarius"
 >>> True
 ```
+
+Very cool. Just a quick word about GHCi before we go any further: the `let` keyword has a very different meaning in GHCi and in proper Haskell. In GHCi, we use `let` to define bindings that remain within the interpreter's scope for the duration of the session. We use this for both variables and functions. In proper Haskell, `let` is used in a very different way to denote local name bindings. We'll cover this latter use in a bit.
+
+## Types
+Haskell's type system is simultaneously its most powerful and most irritating feature. Type safety allows us to write hugely robust programs, but often at the expense of accessibility. If you have not already, you will spend a significant amount of time tearing your hair out over type signatures. Let's take begin previous example, which we'll put in a file called *area.hs* (Note the lack of `let` bindings):
+```haskell
+getArea :: Int -> Int -> Int
+getArea width height = width * height
+```
+Now let's load this file into GHCi and give it a whirl:
+```haskell
+> :l area.hs
+> getArea 4 5
+>>> 20
+```
+This works as before
 ## Immutable Variable
 ```haskell
 let rate = 10
@@ -49,8 +65,7 @@ As we can see here, we've generated a function that goes about taking in two var
 
 Haskell's type system is extremely powerful and very strict. While in Python, you're free to run willy-nilly with duck-typing, Haskell is a bit more strict when it comes to this. To see this, let's take a look at a degenerate example:
 ```haskell
-getDistance :: Int -> Int -> Int
-getDistance speed time = speed * time
+
 ```
 Let's try to run this bad boy:
 ```haskell
