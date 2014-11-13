@@ -9,7 +9,12 @@ let time = 20
 let distance = rate * time
 distance
 ```
-
+Much as we can define variables, we can define the core unit of any given functional language, i.e. functions:
+```haskell
+let distanceTraveled speed time = speed * time
+:t distanceTraveled
+distanceTraveled 20 100
+```
 ## Immutable State
 
 ## Why Haskell?
