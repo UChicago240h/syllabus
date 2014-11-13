@@ -13,8 +13,11 @@ Much as we can define variables, we can define the core unit of any given functi
 ```haskell
 let distanceTraveled speed time = speed * time
 :t distanceTraveled
+>> distanceTraveled :: Num a => a -> a -> a
 distanceTraveled 20 100
 ```
+As we can see here, we've generated a function that goes about taking in two variables and outputting the product, masquerading as a distance-calculating function. The interesting part here the line `:t distanceTraveled`. This tells GHCi to output the type of the given function. We've given the interpreter limited information about the types of the initial inputs, as we can see from the type signature `a -> a -> a`. As expected from a basic type system, this tells that we have a function taking in two variables, both of some generic type 'a', and outputs a data value of type 'a'. The interesting part is the type binding `Num a =>`
+
 ## Immutable State
 
 ## Why Haskell?
