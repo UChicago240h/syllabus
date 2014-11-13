@@ -9,8 +9,28 @@ Much of this first week is concerned with covering the groundwork necessary to u
 Our base of operations in the Haskell world is going to be the Glasgow Haskell Compiler (GHC). While there are other Haskell compilers out there, GHC is the standard and the only thing you should ever touch. Initially, as we're experimenting and refamiliarizing ourselves with the language, we're going to spend a significant amount of time in GHCi, the interpreter facility of GHC. For readers of the notes, I've denoted lines of code to be executed within GHCi as preceded by `>` and output in GHCi with `>>>`.
 
 Let's begin by mucking about and defining some variables:
-
-
+```haskell
+> let height = 5
+> let width = 10
+> width * height
+>>> 50
+> width - height
+>>> 5
+```
+Works much as expected: nothing new to see here. More interesting is where we start going about defining functions:
+```haskell
+> let getArea xWdith yHeight = xWidth * yHeight
+> getArea height width
+>>> 50
+```
+Note that function invocation, as opposed to what most of us are used to from Algol-family languages, does not depend upon the use of parentheses, but properly-spaced function names followed by arguments. Let's go about and define a couple of slightly more robust functions:
+```haskell
+> isLong name = (length name) > 10
+> isLong "Jakub"
+>>> False
+> isLong "Balthazarius"
+>>> True
+```
 ## Immutable Variable
 ```haskell
 let rate = 10
