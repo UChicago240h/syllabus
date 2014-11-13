@@ -16,7 +16,28 @@ let distanceTraveled speed time = speed * time
 >> distanceTraveled :: Num a => a -> a -> a
 distanceTraveled 20 100
 ```
-As we can see here, we've generated a function that goes about taking in two variables and outputting the product, masquerading as a distance-calculating function. The interesting part here the line `:t distanceTraveled`. This tells GHCi to output the type of the given function. We've given the interpreter limited information about the types of the initial inputs, as we can see from the type signature `a -> a -> a`. As expected from a basic type system, this tells that we have a function taking in two variables, both of some generic type 'a', and outputs a data value of type 'a'. The interesting part is the type binding `Num a =>`
+As we can see here, we've generated a function that goes about taking in two variables and outputting the product, masquerading as a distance-calculating function. The interesting part here the line `:t distanceTraveled`. This tells GHCi to output the type of the given function. We've given the interpreter limited information about the types of the initial inputs, as we can see from the type signature `a -> a -> a`. As expected from a basic type system, this tells that we have a function taking in two variables, both of some generic type 'a', and outputs a data value of type 'a'. The interesting part is the type binding `Num a =>`. What has happened here is that the Haskell interpreter has detected that the type binding must be able to perform the `*` operation. The interpreter knows that any types conforming to the `*` operation must by part of the `Num` typeclass.
+
+Haskell's type system is extremely powerful and very strict. While in Python, you're free to run willy-nilly with duck-typing, Haskell is a bit more strict when it comes to this. To see this, let's take a look at a degenerate example:
+```haskell
+getDistance :: Int -> Int -> Int
+getDistance speed time = speed * time
+```
+Let's try to run this bad boy:
+```haskell
+:l distance.hs
+getDistance 8.0 34
+```
+This causes the compiler to throw a fit, complaining that 8.0 is not an instance of `Int`, as it epxects. We can quite easily fix this by killing the type signature and allowing the compiler to generate a generic type signature for us:
+```haskell
+getDistance speed time = speed * time
+
+:l distance.hs
+getDistance 8.0 34
+>> 272.0
+:t getDistance
+>> Num a => a -> a -> a
+```
 
 ## Immutable State
 
