@@ -37,6 +37,7 @@ Very cool. Just a quick word about GHCi before we go any further: the `let` keyw
 ## Types
 Haskell's type system is simultaneously its most powerful and most irritating feature. Type safety allows us to write hugely robust programs, but often at the expense of accessibility to n00bz. If you have not already, you will spend a significant amount of time tearing your hair out over type signatures. Let's take begin previous example, which we'll put in a file called *area.hs*:
 ```haskell
+-- area.hs
 getArea :: Int -> Int -> Int
 getArea width height = width * height
 ```
@@ -80,6 +81,20 @@ Let's load this and make sure it works:
 ```
 Awesome. There's plenty more to be said for this example, but we'll leave it as is for the time being. Types are something that beginning Haskellians spend a lot of time initially struggling with, so do invest the time in understanding and learning how to compose them.
 
+## Lists
+Haskell's take on lists is quite a bit different than what we're used to in imperative languages. Firstly, access time is not constant, but linear. Additionally, lists are constructed in a way that iterative traversal is impossible, forcing us to rely on recursion. Let's take a look at some of these details:
+```haskell
+> let lostNumbers = [4,8,15,16,23,42]
+> lostNumbers
+>>> [4,8,15,16,23,42]
+```
+Awesome. Let's now construct this list in a completely different way, using the const `:` operator:
+```haskell
+> let newNumbers = (4:(8:(15:(16:(23:(42:[]))))))
+> newNumbers
+>>> [4,8,15,16,23,42]
+```
+As we can see here, lists are really successive applications of a binary, left-associative appending operator, which
 ## Typeclasses
 
 ## Pattern Matching
