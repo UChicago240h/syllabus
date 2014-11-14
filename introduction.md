@@ -79,7 +79,19 @@ Let's load this and make sure it works:
 > getArea 2.0 4
 >>> 20.0
 ```
-Awesome. There's plenty more to be said for this example, but we'll leave it as is for the time being. Types are something that beginning Haskellians spend a lot of time initially struggling with, so do invest the time in understanding and learning how to compose them.
+Awesome. There's plenty more to be said for this example, but we'll leave it as is for the time being. There's plenty more to be said about Haskell's type system, much of which we'll cover down the line. Truth be told, the system is so omnipresent and powerful that a lot of beginner Haskellians spend much of their time struggling within its confines. More will be said about this type system, but for now, trust me when I say that it is worth taking the time to master this system and really understand how your types are functioning.
+
+## Control Flow
+Haskell's take on control flow far outstrips what we're used to seeing with the standard Algol-family *if-then-else* constructs. Haskell provides us with a number of takes on control flow that encompass function overloading
+
+### Pattern Matching
+
+### Guards
+
+### List Comprehensions
+
+### Cases
+
 
 ## Lists
 Haskell's take on lists is quite a bit different than what we're used to in imperative languages. Firstly, access time is not constant, but linear. Additionally, lists are constructed in a way that iterative traversal is impossible, forcing us to rely on recursion. Let's take a look at some of these details:
@@ -96,14 +108,6 @@ Awesome. Let's now construct this list in a completely different way, using the 
 ```
 As we can see here, lists are really successive applications of a binary, left-associative appending operator, thus suggesting that much of our list traversal is going to involve peeling elements from the beginning of a list, rather than the iterative type of reversal 
 ## Typeclasses
-
-## Pattern Matching
-
-## List Comprehensions
-
-## Guards
-
-## Cases
 
 ## If/Then
 
