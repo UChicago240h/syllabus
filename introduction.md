@@ -94,7 +94,7 @@ greeting "Hazel" = "Hey Hazel, are we actually working on OS today?"
 greeting "Laura" = "Hey Laura, we should just probably start that project today!"
 greeting _ = "I don't know you bro."
 ```
-```
+```haskell
 > :l greeting.hs
 > greeting "Henry"
 >>> "Hey Henry, let's go drinking today!"
@@ -104,7 +104,15 @@ greeting _ = "I don't know you bro."
 As you can see, we're creating instances of our function that have different behaviors upon explicitly defined input patterns. Truth be told, there's no need to be *this* explicit about our inputs: we'll see how we can have more generalizable pattern matching once we start working with lists. One thing that should be noted is the last case. We utilize the `_` character to denote a general wildcard pattern. This takes the place of an `otherwise`, or `else` pattern.
 
 ### Guards
-Pattern matching is well and good, but oftentimes we want to 
+Pattern matching is well and good, but oftentimes we want to have conditionals more conveniently nested in our function, rather than the top-level routing that pattern matching provides. For example, let's take a function that tells me whether or not I should stop drinking
+```haskell
+keepDrinking :: Int -> String
+keepDrinking numDrinks
+  | numDrinks < 3 = "Keep on chugging"
+  | numDrinks < 6 = "You should probably slow down"
+  | numDrinks < 9 = "You should probably stop"
+  | otherwise     = "You should probably call an ambulance"
+```
 
 ### List Comprehensions
 
