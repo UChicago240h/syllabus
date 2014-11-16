@@ -85,15 +85,26 @@ Awesome. There's plenty more to be said for this example, but we'll leave it as 
 Haskell's take on control flow far outstrips what we're used to seeing with the standard Algol-family *if-then-else* constructs. Haskell provides us with a number of takes on control flow that encompass function overloading, case statements, and the standard *if-then* constructs that we're used to. Let's jump in with pattern matching.
 
 ### Pattern Matching
-Haskell's pattern matching capabilities may be most analogous for most folks to Java's function overlaoding capabilities, but in reality are far more similar to the list deconstruction capabilities found in Lisp (i.e. Common Lisp, Racket, Scheme, Clojure, etc.). Let's take a look by defining a greeting function which properly handles folks we know, dislike, and don't know:
+Haskell's pattern matching capabilities may be most analogous for most folks to Java's function overloading capabilities, but in reality are far more similar to the list deconstruction capabilities found in Lisp (i.e. Common Lisp, Racket, Scheme, Clojure, etc.). Let's take a look by defining a greeting function which properly handles folks we know, dislike, and don't know:
 ```haskell
 -- greeting.hs
 greeting :: String -> String
 greeting "Henry" = "Hey Henry, let's go drinking today!"
-greeting ""
+greeting "Hazel" = "Hey Hazel, are we actually working on OS today?"
+greeting "Laura" = "Hey Laura, we should just probably start that project today!"
+greeting _ = "I don't know you bro."
 ```
+```
+> :l greeting.hs
+> greeting "Henry"
+>>> "Hey Henry, let's go drinking today!"
+> greeting "Shaan"
+>>> "I don't know you bro."
+```
+As you can see, we're creating instances of our function that have different behaviors upon explicitly defined input patterns. Truth be told, there's no need to be *this* explicit about our inputs: we'll see how we can have more generalizable pattern matching once we start working with lists. One thing that should be noted is the last case. We utilize the `_` character to denote a general wildcard pattern. This takes the place of an `otherwise`, or `else` pattern.
 
 ### Guards
+Pattern matching is well and good, but oftentimes we want to 
 
 ### List Comprehensions
 
@@ -114,7 +125,6 @@ Awesome. Let's now construct this list in a completely different way, using the 
 >>> [4,8,15,16,23,42]
 ```
 As we can see here, lists are really successive applications of a binary, left-associative appending operator, thus suggesting that much of our list traversal is going to involve peeling elements from the beginning of a list, rather than the iterative type of reversal 
-## Typeclasses
 
 ## If/Then
 
@@ -128,6 +138,12 @@ As we can see here, lists are really successive applications of a binary, left-a
 
 ## Fold
 
+## Algebraic Data Types
+days of week/pattern matching against this,
+defining trees 
+## Typeclasses
+similar types == similar vocabularies
+allow us to capture vocaburlaries
 
 ## Why Haskell?
 With most Computer Science courses, the reason for taking it is generally fairly obvious: Why take Databases, Networks, Operating Systems, or Parallel Programming? Because these are the fundamental building blocks of systems programming. Why take Discrete Math and Algorithms? Because you need to know the fundamentals of reasoning about program runtime and performance. Why take Complexity? Because you need to graduate. But with a topic this seemingly esoteric, it is probably worthwhile to take a moment and think about why we're doing this.
