@@ -103,6 +103,15 @@ greeting _ = "I don't know you bro."
 ```
 As you can see, we're creating instances of our function that have different behaviors upon explicitly defined input patterns. Truth be told, there's no need to be *this* explicit about our inputs: we'll see how we can have more generalizable pattern matching once we start working with lists. One thing that should be noted is the last case. We utilize the `_` character to denote a general wildcard pattern. This takes the place of an `otherwise`, or `else` pattern.
 
+We can use this in a slightly smarter way. Let's say we wanted to pattern-match for individuals whose names start with an 'S', simply so we can ostracize them. We can do this using a clever pattern-matching construct:
+```haskell
+-- ostracize.hs
+ostracize :: String -> String
+ostracize ('S':_) = "Only fools have a name that starts with S!"
+ostracize ('J':_) = "Ha! John? Jacob? Jingleheimer? More like Jerk!"
+ostracize _ = "I don't have time for you bro."
+```
+
 ### Guards
 Pattern matching is well and good, but oftentimes we want to have conditionals more conveniently nested in our function, rather than the top-level routing that pattern matching provides. For example, let's take a function that tells me whether or not I should stop drinking
 ```haskell
@@ -113,6 +122,7 @@ keepDrinking numDrinks
   | numDrinks < 9 = "You should probably stop"
   | otherwise     = "You should probably call an ambulance"
 ```
+Here, we're creating more explicit conditional statements that map to program outputs. Rather than the pattern matching 
 
 ### List Comprehensions
 
