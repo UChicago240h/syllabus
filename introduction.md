@@ -122,7 +122,7 @@ keepDrinking numDrinks
   | numDrinks < 9 = "You should probably stop"
   | otherwise     = "You should probably call an ambulance"
 ```
-Here, we're creating more explicit conditional statements that map to program outputs. Rather than the pattern matching 
+Here, we're creating more explicit conditional statements that map to program outputs. Rather than the pattern matching, we're able to create conditional statements that allow for true/false evaluation within 
 
 ### List Comprehensions
 
