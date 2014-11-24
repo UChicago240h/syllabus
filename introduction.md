@@ -125,6 +125,26 @@ keepDrinking numDrinks
 Here, we're creating more explicit conditional statements that map to program outputs. Rather than the pattern matching, we're able to create conditional statements that allow for true/false evaluation within 
 
 ### List Comprehensions
+List comprehensions are one of the most efficient ways we have available to us of constructing lists. If you're a serious Pythonista, you've probably seen these once or twice, but Haskell's take on them is much closer to the way that set construction is dealt with in math:
+```haskell
+> [x*2 | x <- [1..20]]
+>>>[2,4,6,8,10,12,14,16,18,20]
+```
+As you can see, this takes each element within the range `[1..10]`, doubles it, and adds it to the list. We can spice this up by adding conditional predicates to this:
+```haskell
+> [x*2 | x <- [1..20], x*2 >= 12]
+>>>[12,14,16,18,20]
+```
+We can further spice this up by having multiple predicates:
+```haskell
+> [x | x <- [10..20], x /= 13, x /= 15, x /= 19]
+>>>[10,11,12,14,16,17,18,20]
+```
+And we can also perform comprehensions over several lists:
+```haskell
+> [ x*y | x <- [2,5,10], y <- [8,10,11]]
+>>> [16, 20,22,40,50,55,80,100,110]
+```
 
 ### Cases
 
