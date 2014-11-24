@@ -199,6 +199,42 @@ describeLetter c =
 As you can probably see, the guarded verion is far cleaner and much more readable overall.
 
 ## Where/Let Clauses
+While the Haskell way is to prevent data from being assigned to temporary placeholders, sometimes we do need to alias certain data points to keep our code clean. Take the following example:
+```haskell
+-- bmi.hs
+bmiTell :: (RealFloat a) => a -> a -> String
+bmiTell weight height
+  | weight / height ^ 2 <= 18.5  = "You're underweight!"
+  | weight / height ^ 2 <= 25.0  = "You're supposedly normal."
+  | weight / height ^ 2 <= 30.0  = "You're fat!"
+  | otherwise                    = "You're a whale!"
+```
+We can see that we repeat the `weight / height ^ 2` clause three separate times, so let's see if we can't alias that away:
+```haskell
+-- bmi.hs
+bmiTell :: (RealFloat a) => a -> a -> String
+bmiTell weight height
+  | bmi <= 18.5  = "You're underweight!"
+  | bmi <= 25.0  = "You're supposedly normal."
+  | bmi <= 30.0  = "You're fat!"
+  | otherwise    = "You're a whale!"
+  where bmi = weight / height ^ 2
+```
+Awesome, that simplifies our code hugely. Now let's further alias the numerical values here to make a bit more sense of them:
+```haskell
+-- bmi.hs
+bmiTell :: (RealFloat a) => a -> a -> String
+bmiTell weight height
+  | bmi <= skinny  = "You're underweight!"
+  | bmi <= normal  = "You're supposedly normal."
+  | bmi <= fat     = "You're fat!"
+  | otherwise      = "You're a whale!"
+  where bmi = weight / height ^ 2
+  	skinny = 18.5
+	normal = 25.0
+	fat = 30.0
+```
+Awesome, our function is a lot clearer and more readable thanks to our `where` bindings. Now, while this is a 
 
 ## Recursion
 
