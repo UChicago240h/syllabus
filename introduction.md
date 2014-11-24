@@ -142,7 +142,7 @@ Awesome. Let's now construct this list in a completely different way, using the 
 > newNumbers
 >>> [4,8,15,16,23,42]
 ```
-As we can see here, lists are really successive applications of a binary, left-associative appending operator, thus suggesting that much of our list traversal is going to involve peeling elements from the beginning of a list, rather than the iterative type of reversal 
+As we can see here, lists are really successive applications of a binary, left-associative appending operator, thus suggesting that much of our list traversal is going to involve peeling elements from the beginning of a list, rather than the iterative type of traversal.
 
 ## If/Then
 
