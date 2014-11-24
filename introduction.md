@@ -176,6 +176,27 @@ Awesome. Let's now construct this list in a completely different way, using the 
 As we can see here, lists are really successive applications of a binary, left-associative appending operator, thus suggesting that much of our list traversal is going to involve peeling elements from the beginning of a list, rather than the iterative type of traversal.
 
 ## If/Then
+Haskell does have an if-then-else construct, though it isn't used particularly often, since it is completely interchangeable with guards:
+```haskell
+-- ifthen.hs
+describeLetter :: Char -> String
+describeLetter c =
+  if c >= 'a' && c <= 'z'
+     then "Lower case"
+     else if c >= 'A' && c <= 'Z'
+     	  then "Upper case"
+	  else "Not an ASCII letter"
+```
+Now let's look at the guards version:
+```haskell
+-- ifthen.hs
+describeLetter :: Char -> String
+describeLetter c =
+  | c >= 'a' && c <= 'z' = "Lower case"
+  | c >= 'A' && c <= 'Z' = "Upper case"
+  | otherwise            = "Not an ASCII letter"
+```
+As you can probably see, the guarded verion is far cleaner and much more readable overall.
 
 ## Where/Let Clauses
 
