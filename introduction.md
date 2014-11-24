@@ -147,7 +147,18 @@ And we can also perform comprehensions over several lists:
 ```
 
 ### Cases
+Case expressions perform the same function as pattern-matching, but can be used in the middle of expressions, as opposed to being limited to the top level of an expression. In fact, pattern matching is merely syntactic sugar for case expressions:
+```haskell
+-- cases.hs
+head' :: [a] -> a
+head' [] = error "No head for empty lists!"
+head' (x:_) = x
 
+describeList :: [a] -> String
+describeList xs = "The list is " ++ case xs of [] -> "empty."
+	     	       	       	    	       [x] -> "a singleton list."
+					       xs -> "a longer list."
+```
 
 ## Lists
 Haskell's take on lists is quite a bit different than what we're used to in imperative languages. Firstly, access time is not constant, but linear. Additionally, lists are constructed in a way that iterative traversal is impossible, forcing us to rely on recursion. Let's take a look at some of these details:
