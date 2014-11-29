@@ -237,7 +237,11 @@ bmiTell weight height
 Awesome, our function is a lot clearer and more readable thanks to our `where` bindings. Now, while this is a 
 
 ## Recursion
-
+```haskell
+factorial :: Int -> Int
+factorial 0 = 1
+factorial n = n * $ factorial $ n-1
+```
 ## Zip
 
 ## Map
