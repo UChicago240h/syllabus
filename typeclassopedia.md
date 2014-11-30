@@ -8,8 +8,15 @@ Before we get into any of the nastiness involving types, we first need to go ahe
 ```haskell
 data Day = Monday | Tuesday | Wednesday | Thursday | Friday | Saturday | Sunday
 ```
-This is all well and good
-days of week/pattern matching against this,
+Now, we can use this construct for creating some reasonably effective code for handling days of the week:
+```haskell
+toDo :: Day -> String
+toDo Saturday = "Sleep all day!"
+toDo Sunday   = "Time to prepare for the week to begin again!"
+toDo _        = "Work all day long!"
+```
+Now, while this is a more readable and (arguably) effective abstraction than arbitrarily assigning weekdays to integer indexes, we can go quite a bit further than this.
+
 defining trees 
 ## Typeclasses
 similar types == similar vocabularies
