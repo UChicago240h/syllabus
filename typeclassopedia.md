@@ -1,8 +1,14 @@
 # The Typeclassopedia
 Advanced Haskell is a lot like modern philosophy. To the uninitiated (which includes most of us), reading it is baffling to no end, and there is little to no financial incentive for putting in the hours/days/weeks necessary to gain some insight. As such, serious practitioners are few and far between, and more likely to be found sitting in dark and dusty offices in various computer science deparments rather than the sensually lit workstations of Silicon Valley. Though I do not expect to convince you that this should be otherwise in one day, I do hope to provide insight into the utility of a Haskellian background as the weeks go on.
 
-This lecture is, like most Haskell lectures, an unusual one, and leans heavily upon a foundational text in the Haskell community. The *Typeclassopedia* is a 30-odd page document written by a PhD student at UPenn, Brent Yorgey. While  
+This lecture is, like most Haskell lectures, an unusual one, and leans heavily upon a foundational text in the Haskell community. The *Typeclassopedia* is a 30-odd page document written by a PhD student at UPenn, Brent Yorgey. While Mr. Yorgey seems to share my own inability to finish school, his document has spread far and wide, primarily because it adddresses the fundamental question at the heart of all advanced Haskell: "What the heck is going on?" Today we'll be going through many of these types and understanding how and why they can be used.
+ 
 ## Algebraic Data Types
+Before we get into any of the nastiness involving types, we first need to go ahead and understand how we can utilize and extend Haskell's typesystem for our own needs. Haskell allows us to easily create our own types, which we can utilize to fantastic results. Take, for example, the days of the week. In most languages, we would have to resort to some unnatural construct, such as integral indexing, in order to create an effective abstraction for representing weekdays. In Haskell, we can do something far more natural:
+```haskell
+data Day = Monday | Tuesday | Wednesday | Thursday | Friday | Saturday | Sunday
+```
+This is all well and good
 days of week/pattern matching against this,
 defining trees 
 ## Typeclasses
