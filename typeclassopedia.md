@@ -38,6 +38,15 @@ double sum(double array[], int n)
 ```
 defining trees 
 ## Typeclasses
+* similar types == vocabulary
+* analogy to Java interfaces
+* example with days of week
+ * show typeclass 
+ * eq
+ * ord
+ * read
+ * bounded
+ * enum
 similar types == similar vocabularies
 allow us to capture vocaburlaries
 
