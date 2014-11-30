@@ -15,8 +15,20 @@ toDo Saturday = "Sleep all day!"
 toDo Sunday   = "Time to prepare for the week to begin again!"
 toDo _        = "Work all day long!"
 ```
-Now, while this is a more readable and (arguably) effective abstraction than arbitrarily assigning weekdays to integer indexes, we can go quite a bit further than this.
-
+Now, while this is a more readable and (arguably) effective abstraction than arbitrarily assigning weekdays to integer indexes, we can go quite a bit further than this. We'll continue this example a bit when we get into the mechanics of typeclasses. For now, let's continue typed quest by exploring a bit of generic programming in Haskell. Generic programming is quite tricky in most statically type languages, requiring an entire book for explaining its use in Java and at least 12 for C++. Let's create a generic tree in Haskell:
+```haskell
+data Tree a = Empty | Node a (Tree a) (Tree a)
+```
+We've just created a type-agnostic, generic binary tree structure. This is a huge win, allowing us to reimagine many of our classic data structures as unbound by many of the classic generic programming concerns. For contrast, let's play around with C++ and Java. Firstly, let's consider a C++ method for summing an array of numbers:
+```c++
+double sum(double array[], int n)
+{
+  double result = 0;
+  for (int i = 0; i < n; ++i)
+    result = result + array[i];
+  return result;
+}
+```
 defining trees 
 ## Typeclasses
 similar types == similar vocabularies
