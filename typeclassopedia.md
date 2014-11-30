@@ -15,7 +15,14 @@ toDo Saturday = "Sleep all day!"
 toDo Sunday   = "Time to prepare for the week to begin again!"
 toDo _        = "Work all day long!"
 ```
-Now, while this is a more readable and (arguably) effective abstraction than arbitrarily assigning weekdays to integer indexes, we can go quite a bit further than this. We'll continue this example a bit when we get into the mechanics of typeclasses. For now, let's continue typed quest by exploring a bit of generic programming in Haskell. Generic programming is quite tricky in most statically type languages, requiring an entire book for explaining its use in Java and at least 12 for C++. Let's create a generic tree in Haskell:
+Now, while this is a more readable and (arguably) effective abstraction than arbitrarily assigning weekdays to integer indexes, we can go quite a bit further than this. We'll continue this example a bit when we get into the mechanics of typeclasses. For now, let's continue typed quest by exploring a bit of generic programming in Haskell. Generic programming is quite tricky in most statically type languages, requiring an entire book for explaining its use in Java and at least 12 for C++. Let's create a generic tree in Java, for illustration:
+```java
+public class BinaryTree<E> {
+  private BinaryTree<E> left, right;
+  private E data;
+}
+```
+The Haskell way does not deviate an enormous amount from the Java definition: 
 ```haskell
 data Tree a = Empty | Node a (Tree a) (Tree a)
 ```
