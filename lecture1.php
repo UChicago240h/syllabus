@@ -54,4 +54,28 @@ Num a => a -> a -> a
 
 <p>Our task is going to be to use what we've learned thus far to write a function that calculates and returns the maximum sum subarray given a list of numbers. By the end of this lecture, we'll have created a command line tool that takes a in a text file as input, finds the max-sum subarray of each line, and outputs each of these subarrays to a file.</p>
 
+<code>
+import Data.List (inits, tails, maximumBy)
+import Data.Ord (comparing)
+
+subseqs :: [a] -> [[a]]
+subsequs = concatMap inits . tails
+
+maxsubseq :: (Ord a, Num a) => [a] -> [a]
+maxsubseq = maximumBy (comparing sum) . subseqs
+
+main :: IO ()
+main =  print $ maxsubseq [-1, -2, 3, 5, 6, -2, -1, 4, -4, 2, -1]
+</code>
+
+<code>
+maxsubseq = snd . foldl f ((0,[]),(0,[])) where
+        f ((h1,h2),sofar) x = (a,b) where
+                a = max (0,[]) (h1 + x, h2 ++ [x])
+                b = max sofar a
+
+main = print $ maxsubseq [-1, -2, 3, 5, 6, -2, -1, 4, -4, 2, -1]
+</code>
+</code>
+
 <?php foot(); ?>
