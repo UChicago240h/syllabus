@@ -28,7 +28,27 @@
 > width - height
 5
 </code>
-<p>Nothing shocking here: we can perform basic calculations
+
+<p>Nothing shocking here: we can perform basic calculations and perform what seems like variable bindings. Let's go ahead and define a function:</p>
+
+<code>
+> let area h w = h * w
+> area height width
+50
+</code>
+
+<p>Once again, we're not starting any revolutions here. We've defined a function. But let's start taking a look at the types of what we've defined. Before we begin, formulate what you expect the types of <code>height</code>, <code>width</code>, and <code>area</code> to be. Now, let's go ahead and check each of these out:</p>
+
+<code>
+> :t width
+Num a => a
+> :t height
+Num a => a
+> :t area
+Num a => a -> a -> a
+</code>
+
+<p>Okay, that's a little unexpected. For those of us</a>
 <h2>Hitting the Ground Running</h2>
 <p>I'm of the belief that good problems get us to great solutions, so we're going to begin with a classic: the <strong><a href="#">maximum subarray problem</a></strong>. Formally stated, (ripped directly from Wikipedia), "the maximum subarray problem is the task of finding the contiguous subarray within a one-dimentional array of numbers (containing at least one positive number) which has the largest sum."</p>
 
