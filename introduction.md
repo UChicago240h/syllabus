@@ -227,7 +227,7 @@ $ time ./fibonacci
 
 real  0m10.601s
 user  0m10.560s
-sys 0m0.047s
+sys   0m0.047s
 ```
 
 Wow, 10 whole seconds for computing a fibonacci number. Talk about embarassing. But we know we can improve this with some basic memoization. Unfortunately, memoization in imperative languages generally involves mutating some global data structure and then performing lookups and inserts based on the status of that global data structure. As an example, let's consider the memoized problem in Python:
@@ -243,9 +243,32 @@ def fibonacci_memo(n):
   fib_vals[n] = fibonacci(n-1) + fibonacci(n-2)
   return fib_vals[n]
 ```
-As you can see, the entire memoization procedure depends upon our mutation of 
-## Zip
+As you can see, the entire memoization procedure depends upon our mutation of a globally-accessible data structure. While this is all well and good, we really can't do this in Haskell. In order to make this happen properly, we're going to have to take a second and recall `map`.
 
 ## Map
+Map, as we remember, is our method for whacking lists with various functions as we iterate over them.
+```haskell
+> map (*2) [2..10]
+[24,6,8,10,12,14,16,18,20]
+```
+## Memoizing
+Let's go ahead and make this memoization happen
+```haskell
+-- fibonacci_memo
+fibonacci :: Int -> Integer
+fibonacci = (map fib [0..] !!)
+  where fib 0 = 0
+        fib 1 = 1
+        fib n = fibonacci (n-1) + fibonacci (n-2)
+```
 
-## Fold
+```bash
+$ ghc fibonacci_memo.hs
+$ time ./fibonacci_memo
+102334155
+
+real  0m0.002s
+user  0m0.000s
+sys   0m0.000s
+```
+This, to say the least, is a not-insignificant improvement.
