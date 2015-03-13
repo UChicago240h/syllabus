@@ -146,20 +146,6 @@ And we can also perform comprehensions over several lists:
 >>> [16, 20,22,40,50,55,80,100,110]
 ```
 
-### Cases
-Case expressions perform the same function as pattern-matching, but can be used in the middle of expressions, as opposed to being limited to the top level of an expression. In fact, pattern matching is merely syntactic sugar for case expressions:
-```haskell
--- cases.hs
-head' :: [a] -> a
-head' [] = error "No head for empty lists!"
-head' (x:_) = x
-
-describeList :: [a] -> String
-describeList xs = "The list is " ++ case xs of [] -> "empty."
-	     	       	       	    	       [x] -> "a singleton list."
-					       xs -> "a longer list."
-```
-
 ## Lists
 Haskell's take on lists is quite a bit different than what we're used to in imperative languages. Firstly, access time is not constant, but linear. Additionally, lists are constructed in a way that iterative traversal is impossible, forcing us to rely on recursion. Let's take a look at some of these details:
 ```haskell
@@ -175,30 +161,7 @@ Awesome. Let's now construct this list in a completely different way, using the 
 ```
 As we can see here, lists are really successive applications of a binary, left-associative appending operator, thus suggesting that much of our list traversal is going to involve peeling elements from the beginning of a list, rather than the iterative type of traversal.
 
-## If/Then
-Haskell does have an if-then-else construct, though it isn't used particularly often, since it is completely interchangeable with guards:
-```haskell
--- ifthen.hs
-describeLetter :: Char -> String
-describeLetter c =
-  if c >= 'a' && c <= 'z'
-     then "Lower case"
-     else if c >= 'A' && c <= 'Z'
-     	  then "Upper case"
-	  else "Not an ASCII letter"
-```
-Now let's look at the guards version:
-```haskell
--- ifthen.hs
-describeLetter :: Char -> String
-describeLetter c =
-  | c >= 'a' && c <= 'z' = "Lower case"
-  | c >= 'A' && c <= 'Z' = "Upper case"
-  | otherwise            = "Not an ASCII letter"
-```
-As you can probably see, the guarded verion is far cleaner and much more readable overall.
-
-## Where/Let Clauses
+## Local Bindings
 While the Haskell way is to prevent data from being assigned to temporary placeholders, sometimes we do need to alias certain data points to keep our code clean. Take the following example:
 ```haskell
 -- bmi.hs
@@ -237,11 +200,50 @@ bmiTell weight height
 Awesome, our function is a lot clearer and more readable thanks to our `where` bindings. Now, while this is a 
 
 ## Recursion
+The vast majority of CS students (at other, more sane institutions) learned about looping by way of the glorious `for` and `while` loops. But we're insufferable hipsters, so we learned about recursion. Since Haskell doesn't allow us to mutate variables or global state, we are pretty much limited to working with various forms of traversable objects (`Functor`, `Foldable`, `Traversable`, etc.). Recursion works pretty much exactly like you'd expect it to:
 ```haskell
-factorial :: Int -> Int
-factorial 0 = 1
-factorial n = n * $ factorial $ n-1
+fibonacci :: Int -> Int
+fibonacci 0 = 0
+fibonacci 1 = 1
+fibonacci n = fibonacci (n-2) + fibonacci (n-1)
 ```
+Now, while this is unsurprising, it is inefficient. As in most basic fibonacci implementations, we're recomputing an enormous amount of values, thus causing a huge performance hit. Just to illustrate, let's try actually running this:
+
+```haskell
+-- fibonacci.hs
+fibonacci :: Int -> Integer
+fibonacci 0 = 0
+fibonacci 1 = 1
+fibonacci n = fibonacci (n-1) + fibonacci (n-2)
+
+main = do
+  print $ fibonacci 40
+```
+
+```bash
+$ ghc fibonacci.hs
+$ time ./fibonacci
+102334155
+
+real  0m10.601s
+user  0m10.560s
+sys 0m0.047s
+```
+
+Wow, 10 whole seconds for computing a fibonacci number. Talk about embarassing. But we know we can improve this with some basic memoization. Unfortunately, memoization in imperative languages generally involves mutating some global data structure and then performing lookups and inserts based on the status of that global data structure. As an example, let's consider the memoized problem in Python:
+```python
+fib_vals = {}
+def fibonacci_memo(n):
+  if n == 0:
+    return 0
+  if n == 1:
+    return 1
+  if n in fib_vals:
+    return fib_vals[n]
+  fib_vals[n] = fibonacci(n-1) + fibonacci(n-2)
+  return fib_vals[n]
+```
+As you can see, the entire memoization procedure depends upon our mutation of 
 ## Zip
 
 ## Map
