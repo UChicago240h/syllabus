@@ -257,14 +257,33 @@ mulFunc a = (* a)
 > double 4
 8
 ```
-Awesome, so we can create functions that generate more functions. Now, let's say we want to take this function and apply it to multiple arguments within a list. Say, for example, we wanted to take a list and double all elements within it:
+Awesome, so we can create functions that generate more functions. Now, let's say we want to take this function and apply it to multiple arguments within a list. In order to make this happen, we can create a function that takes in said list and function, and sequentially applies the function to each element within the list. As such, we can write a map function in the canonical Haskell way:
+```haskell
+map :: (a -> b) -> [a] -> [b]
+map _ [] = []
+map f (x:xs) = f x : map f xs
+```
+For those of you that haven't seen this before, note that all we're doing is pattern matching and generating sequential recursive applications via list decomposition. As far as using this, let's say we wanted to take a list and double all elements within it:
 ```haskell
 > map (*2) [2..10]
 [4,6,8,10,12,14,16,18,20]
 ```
-Fairly basic stuff: we've managed to double each number in the list by mapping over it
+
+Fairly basic stuff: we've managed to double each number in the list by mapping over it. Let's try a couple more things:
+```haskell
+> map (++ "!") ["BIFF", "BANG", "POW"]
+["BIFF!", "BANG!", "POW!"]
+> map (replicate 3) [3..6]
+[[3,3,3],[4,4,4],[5,5,5],[6,6,6]]
+> map (map (^2)) [[1,2],[3,4,5,6],[7,8]]
+[[1,4],[9,16,25,36],[49,64]]
+> map (!! 1) [[1,2],[3,4,5,6],[7,8]]
+[2,4,8]
+```
+Do note the `!!` operator. This operator defines explicit indexing in Haskell. This is far less commonly used in Haskell than many other languages, since array indexing is actually an `O(n)` operation, rather than the `O(1)` operation we're used to.
+
 ## Memoizing
-Let's go ahead and make this memoization happen
+Now that we've gotten a good understanding of maps, let's go ahead and think about how we can utilize this for memoization. While we can't create mutable data structures, we can create a recursively defined list that effectively caches intermediary values, and then map our fibonacci function over that list. We can even make this an infinite list, since, due to Haskell's lazy evaluation, only the values up to the value of interest will actually be evaluated.
 ```haskell
 -- fibonacci_memo
 fibonacci :: Int -> Integer
@@ -272,7 +291,11 @@ fibonacci = (map fib [0..] !!)
   where fib 0 = 0
         fib 1 = 1
         fib n = fibonacci (n-1) + fibonacci (n-2)
+
+main = do
+  print $ fibonacci 40
 ```
+Note both the use of the `!!` operator, and the `[0..]` infinite range. As we mentioned before, Haskell's lazy evaluation allows us to utilize such infinite ranges without loss of performance. The locally defined `fib` function, combined with the map, allows us to get our runtime down from `O(n!)` to `O(n)`. We can see that results by explicitly timing our program:
 
 ```bash
 $ ghc fibonacci_memo.hs
@@ -283,4 +306,71 @@ real  0m0.002s
 user  0m0.000s
 sys   0m0.000s
 ```
-This, to say the least, is a not-insignificant improvement.
+This, to say the least, is a not-insignificant improvement. But we can still do better. Let's consider...
+
+## Data Types
+Let's finish up by pushing our fibonacci calculator as far as we possibly can. Right now, we've gotten our runtime down to `O(n)`, but there is a way to further shave our runtime down to `O(log n)`.
+
+If we write the equations F_1 = F_1 and F_2 = F_0 + F_1 in matrix notation, we get:
+```
+( F_1 F_2 ) = (0 1; 1 1) * (F_0; F_1)
+( F_2 F_3 ) = (0 1; 1 1) * (F_1; F_2) = (0 1; 1 1)^2 * (F_0; F_1) 
+```
+More generally, we have:
+```
+( F_n F_n+1 ) = (0 1; 1 1)^n * (F_0; F_1) 
+```
+Now, we can use fast exponentiation to break down our calculating `f^n` in `O(log n)` time. As an example, let's see this via python:
+```python
+def pow(base, power):
+  if power == 0:
+    return 1
+  if power % 2 == 0:
+    return pow(base*base, power/2)
+  return base * pow(base, power-1)
+```
+Due to recursive halving of the power, we're able to get this runtime down to `O(log n)` runtime. Now, let's combine this with our initial insight about exploiting matrix multiplication to get a close-to-ideal version of fibonacci:
+
+First, we need to define a matrix datatype. We can easily do this by way of Haskell's ability to define datatypes:
+```haskell
+data GL2 = GL2 Integer Integer Integer Integer
+```
+
+Now, let's define a matrix multiplication routine:
+```haskell
+mul :: GL2 -> GL2 -> GL2
+mul (GL2 a b c d) (GL2 e f g h) = GL2 (a*e+b*g) (a*f+b*h) (c*e+d*g) (c*f+d*h)
+```
+
+We can now utilize this machinery to create a recursive definition of recursive exponentiation:
+```haskell
+fastexp :: GL2 -> Int -> GL2
+fastexp _ 0 = GL2 1 0 0 1
+fastexp a 1 = a
+fastexp a n
+  | even n = fastexp (mul a a) (div n 2)
+  | otherwise = mul a (fastexp a (n-1))
+```
+
+We now have our recursive definition dividing the power by 2 at each point, while squaring the matrix at each point there's an even power. Now, we just need to add on the machinery and run the program:
+```haskell
+fib :: Int -> Integer
+fib n = b
+  where GL2 a b _ _ = fastexp (GL2 1 1 1 0) n
+
+main = do
+  print $ fib 40
+```
+
+Now let's run and time the program:
+```bash
+$ ghc fibonacci_matrix.hs
+$ time ./fibonacci_matrix
+
+real   0m0.004s
+user   0m0.000s
+sys    0m0.003s
+```
+So the actual runtime is slightly greater than our memoized version, most likely due to the overhead of having to calculate matrix multiplications. But, algorithmically, we can't get much better than this.
+
+Next time, we'll be covering the Typeclassopaedia, so be ready for monads, functors, and applicatives.
