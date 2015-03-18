@@ -230,7 +230,9 @@ user  0m10.560s
 sys   0m0.047s
 ```
 
-Wow, 10 whole seconds for computing a fibonacci number. Talk about embarassing. But we know we can improve this with some basic memoization. Unfortunately, memoization in imperative languages generally involves mutating some global data structure and then performing lookups and inserts based on the status of that global data structure. As an example, let's consider the memoized problem in Python:
+At this point, we're taking slightly north of 10 seconds for calculating a fibonacci number. Suffice it to say, this will not scale. But we know we can improve this with some basic memoization. Just to make sure we're all on the same page, much of the issue here stems from the fact that we're recursively recalculating multiple fibonacci values. We can solve this by caching our intermediary values in some kind of data structure that supports constant-time lookup, thus allowing us to skip the recalculation steps that are adding so much to the runtime.  
+
+Unfortunately, memoization in imperative languages generally involves mutating some global data structure and then performing lookups and inserts based on the status of that global data structure. As an example, let's consider the memoized problem in Python:
 ```python
 fib_vals = {}
 def fibonacci_memo(n):
@@ -243,14 +245,24 @@ def fibonacci_memo(n):
   fib_vals[n] = fibonacci(n-1) + fibonacci(n-2)
   return fib_vals[n]
 ```
-As you can see, the entire memoization procedure depends upon our mutation of a globally-accessible data structure. While this is all well and good, we really can't do this in Haskell. In order to make this happen properly, we're going to have to take a second and recall `map`.
+As you can see, the entire memoization procedure depends upon our mutation of a globally-accessible data structure. While this is all well and good, we really can't do this in Haskell, thus forcing us to be a more creative. Before we can make this happen, we need to look back and recall the `map` function.
 
 ## Map
-Map, as we remember, is our method for whacking lists with various functions as we iterate over them.
+One of the beautiful things about Haskell is how we can utilize higher-order functions. In most imperative languages that we're familiar with, functions only go so far as their explicit definition, and are extensible only to the extent of their type signatures, if even that. Haskell allows us a whole host of magical capacities to play with functions. The first of these is the ability to curry functions, that is to create partially applied functions. As a result of this, we can create functions that are effectively function generators:
+```haskell
+mulFunc :: Num a => a -> a -> a
+mulFunc a = (* a)
+
+> let double = mulFunc 2
+> double 4
+8
+```
+Awesome, so we can create functions that generate more functions. Now, let's say we want to take this function and apply it to multiple arguments within a list. Say, for example, we wanted to take a list and double all elements within it:
 ```haskell
 > map (*2) [2..10]
-[24,6,8,10,12,14,16,18,20]
+[4,6,8,10,12,14,16,18,20]
 ```
+Fairly basic stuff: we've managed to double each number in the list by mapping over it
 ## Memoizing
 Let's go ahead and make this memoization happen
 ```haskell
