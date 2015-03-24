@@ -59,5 +59,33 @@
 </code>
 <p>The first time we encounter this, it can be quite mysterious. What the interpreter is telling us is that it has no way of knowing how to print the data type we have defined. The core of the problem boils down to the fact that we haven't defined or applied a type class definition to our new data type.</p>
 
-<h2>Type Classes</h1>
+<h2>Type Classes</h2>
+<p>Type classes are Haskell's method of creating defining consistent behaviors and functions across a variety of types. The closest analog that I can think of are Java's interfaces. Java allows to define interfaces, which specify a number of functions which all objects implementing the given interface must implement. Consider:</p>
+<code>
+  public interface Animal {
+    public void speak();
+    public boolean isWild();
+  }
+
+  public class Tiger implements Animal {
+    public void speak() {
+      System.out.println("RAWR!");
+    }
+    
+    public boolean isWild() {
+      return true;
+    }
+  }
+
+  public class Dog implements Animal {
+    public void speak() {
+      System.out.println("WOOF!!");
+    }
+
+    public boolean isWild() {
+      return false;
+    }
+  }  
+</code>
+<p>Here, we've created an <code>Animal</code> interface which specifies a number of functions that all Animals must implement, and two classes which both implement this Animal interface. The big win here is that we can now consistently refer to instantiations of the <code>Tiger</code> and <code>Dog</code> classes </p>
 </php>
