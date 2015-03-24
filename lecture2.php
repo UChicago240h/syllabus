@@ -87,5 +87,15 @@
     }
   }  
 </code>
-<p>Here, we've created an <code>Animal</code> interface which specifies a number of functions that all Animals must implement, and two classes which both implement this Animal interface. The big win here is that we can now consistently refer to instantiations of the <code>Tiger</code> and <code>Dog</code> classes </p>
-</php>
+<p>Here, we've created an <code>Animal</code> interface which specifies a number of functions that all Animals must implement, and two classes which both implement this Animal interface. The big win here is that we can now consistently refer to instantiations of the <code>Tiger</code> and <code>Dog</code> classes as instantiations of <code>Animal</code>, allowing us to write functions that begin to approach polymorphicism:</p>
+<code>
+  public String handleAnimal(Animal a) {
+    if (a.isWild()) {
+      return "Handle this very carefully";
+    } else {
+      return "You should be OK";
+    }
+  }
+</code>
+<p>So we've now written a method that allows us to act upon various classes, so long as they all implement the <code>Animal</code> interface.</p>
+<p>Haskell type classes work in a similar vein as Java interfaces, but piggy-back off Haskell's powerful type system to yield some amazing results. Let's consider a type class definition ripped directly from the Haskell standard library, the <code>Eq</code> type class:</p>                                                                                             </php>
