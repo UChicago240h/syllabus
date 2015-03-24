@@ -8,5 +8,32 @@
 <code>
   data WeekDay = Monday | Tuesday | Wednesday | Thursday | Friday | Saturday | Sunday
 </code>
+<p>This is a huge win: it allows us to write code that effectively typechecks and more effectively conveys our intentions. With languages like Python or C, we have to spend some time browsing through documentation before we can understand our code's intention. For example, let's consider a quick C function that let's us know what we're going to be doing each day of the week:</p>
+<code>
+  def toDo(day):
+    if day == 0:
+      return "Chilling and preparing for the week to begin!"
+    if day == 1:
+      return "Beginning the week!"
+    if day > 1 and day < 5:
+      return "Working all day!"
+    if day == 5:
+      return "Preparing for the weekend!"
+    if day == 6:
+      return "Sleeping all day long!"
+    return "I don't know what day that is!"
+</code>
+<p>Now, let's try writing this code in Haskell:</p>
+<code>
+  data Day = Monday | Tuesday | Wednesday | Thursday | Friday | Saturday | Sunday
 
+  toDo :: Day -> String
+  toDo day
+    | Sunday = "Chilling and preparing for the week to begin!" 
+    | Monday = "Beginning the week!"
+    | Friday = "Preparing for the weekend!"
+    | Saturday = "Sleeping all day long!"
+    | otherwise = "Working all day!"
+</code>
+<p>Great.</p>
 </php>
