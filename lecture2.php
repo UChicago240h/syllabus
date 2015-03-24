@@ -49,13 +49,15 @@
     | 6         = Just Saturday
     | otherwise = Nothing
 </code>
-<p>Now, le's try to make use of this function. Let's write a simple command program that takes an integer from the command line and prints out the corresponding day:</p>
+<p>Now, let's try to make use of this function. We'll load this into ghci and try to run this:</p>
 <code>
-  import System.Environment (getArgs)
-
-  main :: IO ()
-  main = do
-    args <- getArgs
-    day <- intToDay $ read $ head args
+  ghci > :l weekdays.hs
+  ghci > intToDay 2
+    No instance for (Show Day) arising from a use of `print'
+    Possible fix: add an instance declaration for (Show Day)
+    In a stmt of an interactive GHCi command: print it
 </code>
+<p>The first time we encounter this, it can be quite mysterious. What the interpreter is telling us is that it has no way of knowing how to print the data type we have defined. The core of the problem boils down to the fact that we haven't defined or applied a type class definition to our new data type.</p>
+
+<h2>Type Classes</h1>
 </php>
