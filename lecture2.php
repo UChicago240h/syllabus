@@ -35,5 +35,27 @@
     | Saturday = "Sleeping all day long!"
     | otherwise = "Working all day!"
 </code>
-<p>Great.</p>
+<p>Great. We now have a function and datatype that very clearly and concisely communicates the intentions behind our code. There is no need to look up external documentation. Another bonus in this is that it eliminates the need for the clause that returns a failure message in case of an unrecognized input. Since the <code>Day</code> type that we defined is restricted to the members of the enum we have defined, any values outside our constraints will throw a type error during compilation.</p>
+<p>Now, this is all well and good, but there are certain issues we have to deal with when creating new data types. Let's illustrate this by trying to do something a bit more than just pure functions with our new data type. We'll first write a function that converts integers to weekdays:</p>
+<code>
+  intToDay :: Int -> Maybe Day
+  intToDay x
+    | 0         = Just Sunday
+    | 1         = Just Monday
+    | 2         = Just Tuesday
+    | 3         = Just Wednesday
+    | 4         = Just Thursday
+    | 5         = Just Friday
+    | 6         = Just Saturday
+    | otherwise = Nothing
+</code>
+<p>Now, le's try to make use of this function. Let's write a simple command program that takes an integer from the command line and prints out the corresponding day:</p>
+<code>
+  import System.Environment (getArgs)
+
+  main :: IO ()
+  main = do
+    args <- getArgs
+    day <- intToDay $ read $ head args
+</code>
 </php>
