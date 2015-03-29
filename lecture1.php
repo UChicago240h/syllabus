@@ -425,15 +425,15 @@ Now that we've gotten a good understanding of maps, let's go ahead and think abo
 <p>Let's finish up by pushing our fibonacci calculator as far as we possibly can. Right now, we've gotten our runtime down to `O(n)`, but there is a way to further shave our runtime down to `O(log n)`.</p>
 
 <p>If we write the equations F_1 = F_1 and F_2 = F_0 + F_1 in matrix notation, we get:</p>
-<code>
-  ( F_1 F_2 ) = (0 1; 1 1) * (F_0; F_1)
-  ( F_2 F_3 ) = (0 1; 1 1) * (F_1; F_2) = (0 1; 1 1)^2 * (F_0; F_1) 
-</code>
+<ul class="open-list">
+  <li>$\begin{bmatrix} F_1 \\ F_2 \end{bmatrix} = \begin{bmatrix}0 1 & 1 1 \\ F_0 & F_1\end{bmatrix}$</li>
+  <li>$\begin{bmatrix}F_2 \\ F_3\end{bmatrix} = \begin{bmatrix}0 & 1 \\ 1 & 1\end{bmatrix} \cdot \begin{bmatrix}F_1 \\ F_2\end{bmatrix} = \begin{bmatrix}0 & 1 \\ 1 & 1\end{bmatrix}^2 \cdot \begin{bmatrix}F_0 \\ F_1\end{bmatrix}</li> 
+</ul>
 
 <p>More generally, we have:</p>
-<code>
-  ( F_n F_n+1 ) = (0 1; 1 1)^n * (F_0; F_1) 
-</code>
+<ul class="open-list">
+  <li>\begin{bmatrix}F_n \\ F_n+1\end{bmatrix} = \begin{bmatrix}0 & 1 \\ 1 & 1)^n \cdot \begin{bmatrix}F_0 & F_1\end{bmatrix}</li>
+</ul>
 
 <p>Now, we can use fast exponentiation to break down our calculating `f^n` in `O(log n)` time. As an example, let's see this via python:</p>
 <code>
