@@ -76,6 +76,26 @@ maxsubseq = snd . foldl f ((0,[]),(0,[])) where
 
 main = print $ maxsubseq [-1, -2, 3, 5, 6, -2, -1, 4, -4, 2, -1]
 </code>
-</code>
 
+
+// conversion starts here
+<h1>Lecture 1</h1>
+<h2>Haskell</h2>
+<p>As all Haskell courses begin, so does this one: with the most banal description of the language possible. **Haskell is a lazy pure functional language.** What this means, I'm assuming most of you know already: if you don't, this course is probably not for you. At the highest level, this means that Haskell is very, very, very different from most programming languages that you have worked with previously. We'll get into the details of the weirdness in a bit, with much of it hopefully being familiar.</p>
+
+<h2>Today's Goals</h2>
+<p>Much of this first week is concerned with covering the groundwork necessary to understand the more advanced topics in class. We're making the assumption that folks here are familiar with Haskell and need no more than a refresher, so much of the material is going to be covered in a cursory fashion and a very rapid speed.</p>
+
+<h2>Beginning with GHC(i)</h2>
+<p>Our base of operations in the Haskell world is going to be the Glasgow Haskell Compiler (GHC). While there are other Haskell compilers out there, GHC is the standard and the only thing you should ever touch. Initially, as we're experimenting and refamiliarizing ourselves with the language, we're going to spend a significant amount of time in GHCi, the interpreter facility of GHC. For readers of the notes, I've denoted lines of code to be executed within GHCi as preceded by `>` and output in GHCi with `>>>`.</p>
+
+<p>Let's begin by mucking about and defining some variables:</p>
+<code>
+> let height = 5
+> let width = 10
+> width * height
+>>> 50
+> width - height
+>>> 5
+</code>
 <?php foot(); ?>
