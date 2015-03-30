@@ -192,53 +192,99 @@ describeLetter c =
 As you can hopefully see, this code is much cleaner, more readable, and more usable.
 
 ### Case Statements
-The final piece of flow control we'll cover today is case statements. Case statements allow us to execute code blocks for specific values of a given variable. This is terrific because
-
-### List Comprehensions
-List comprehensions are one of the most efficient ways we have available to us of constructing lists. If you're a serious Pythonista, you've probably seen these once or twice, but Haskell's take on them is much closer to the way that set construction is dealt with in math:
+The final piece of flow control we'll cover today is case statements. Case statements allow us to execute code blocks for specific values of a given variable. For our example, we'll be dipping a bit into lists, which we'll cover next:
 ```haskell
-> [x*2 | x <- [1..20]]
->>>[2,4,6,8,10,12,14,16,18,20]
+describeList :: [a] -> String
+describeList ls = case ls of [] -> "empty"
+                             [x] -> "a singleton list"
+                             xs -> "a longer list"
 ```
-As you can see, this takes each element within the range `[1..10]`, doubles it, and adds it to the list. We can spice this up by adding conditional predicates to this:
-```haskell
-> [x*2 | x <- [1..20], x*2 >= 12]
->>>[12,14,16,18,20]
-```
-We can further spice this up by having multiple predicates:
-```haskell
-> [x | x <- [10..20], x /= 13, x /= 15, x /= 19]
->>>[10,11,12,14,16,17,18,20]
-
-```
-And we can also perform comprehensions over several lists:
-```haskell
-> [ x*y | x <- [2,5,10], y <- [8,10,11]]
->>> [16, 20,22,40,50,55,80,100,110]
-```
+Here, we're doing basic pattern matching, using the `case-of` syntax. Note, that the `[]` syntax denotes an empty list, and also allows us to directly pattern match against a list with a singular element.
 
 ## Lists
-Haskell's take on lists is quite a bit different than what we're used to in imperative languages. Firstly, access time is not constant, but linear. Additionally, lists are constructed in a way that iterative traversal is impossible, forcing us to rely on recursion. Let's take a look at some of these details:
-```haskell
-> let lostNumbers = [4,8,15,16,23,42]
-> lostNumbers
->>> [4,8,15,16,23,42]
-```
-Awesome. Let's now construct this list in a completely different way, using the const `:` operator:
-```haskell
-> let newNumbers = (4:(8:(15:(16:(23:(42:[]))))))
-> newNumbers
->>> [4,8,15,16,23,42]
-```
-As we can see here, lists are really successive applications of a binary, left-associative appending operator, thus suggesting that much of our list traversal is going to involve peeling elements from the beginning of a list, rather than the iterative type of traversal.
+Lists may first seem to us like the arrays of imperative languages, but Haskell's take on lists is quite a bit different than what we're used to. In fact, Haskell lists are far more similar to what we know as linked lists, though with far more power. It should be noted, access time is not constant, but linear. Additionally, iterative list operations are not something we can rely on, since Haskell has no notion of variable mutation. Instead, we have to rely on recursion, folds, and maps in order to properly traverse lists. Let's begin by looking at a list in three ways.
 
-We can use this in a slightly smarter way. Let's say we wanted to pattern-match for individuals whose names start with an 'S', simply so we can ostracize them. We can do this using a clever pattern-matching construct:
+The most basic method of lis definition is one that will likely seem familiar:
+```haskell
+> let firstTen = [1,2,3,4,5,6,7,8,9,10]
+> firstTen
+[1,2,3,4,5,6,7,8,9,10]
+```
+
+This is fine, but there's a much shorter way to do this using ranges:
+```haskell
+> [1..10]
+[1,2,3,4,5,6,7,8,9,10]
+> ['a', 'z']
+"abcdefghijklmnopqrstuvwxyz"
+```
+This is pretty cool. We can quickly construct ordered lists in this manner. Do note the second example, where the output is a string. This is because Haskell strings are simply type aliases for lists of `Chars`. We can do slightly more clever things with ranges as well:
+```haskell
+> ['a','c'..'y']
+"acegikmoqsuwy"
+```
+Very cool, we can even implicitly specify the step size for our range constructor.
+
+Let's now construct our previous list in a completely different way, using the const `:` operator:
+```haskell
+> let firstTen = (1:(2:(3:(4:(5:(6:(7:(8:(9:(10:[]))))))))))
+> firstTen
+[1,2,3,4,5,6,7,8,9,10]
+```
+This may seem a little obscure, but it becomes a bit clearer when we understand that lists are really composed of successive applications of the binary, left-associative appending const operator `:`. The closest analog to Haskell lists, for those of you that took 151, is Lisp lists. Thus, much like list, much of Haskell's list traversal is going to involve peeling elements from the beginning of a list, rather than the iterative type of traversal.
+
+This method of list construction allows us to do some pretty great things. An initial use of this is in list comprehensions. Let's say we wanted to pattern-match for individuals whose names start with an 'B', simply so we can ostracize them. We can do this using a clever pattern-matching construct:
 ```haskell
 -- ostracize.hs
 ostracize :: String -> String
-ostracize ('S':_) = "Only fools have a name that starts with S!"
+ostracize ('B':_) = "Only fools have a name that starts with B!"
 ostracize ('J':_) = "Ha! John? Jacob? Jingleheimer? More like Jerk!"
 ostracize _ = "I don't have time for you bro."
+```
+
+We're able to use list decompositions in pattern matching to allow us to get more robust pattern constructs. But let's say we want to pattern match and extract the entire list input in our ostracise function, so we can make our ostracism a bit more personal. We can do this the naive way by way of ist concatenation:
+```haskell
+-- ostracize_personal.hs
+ostracize :: String -> String
+ostracize ('B':xs) = "Only fools have a name that starts with B! Fools like you, B" ++ xs
+ostracize ('J':ys) = "Ha! J" ++ ys ++ "? Jacob? Jingleheimer? More like Jerk!"
+ostracize zs = zs ++ "I don't have time for you bro."
+```
+
+This is fine, but a bit icky. We can fix this by extracting the initial input:
+```haskell
+-- ostracize.hs
+ostracize :: String -> String
+ostracize xs@('B':_) = "Only fools have a name that starts with B! Fools like you, " ++ xs
+ostracize xs@('J':_) = "Ha! " ++ xs ++ "? Jacob? Jingleheimer? More like Jerk!"
+ostracize xs = xs ++ ", I don't have time for you bro."
+```
+
+Great. We now have pattern matching over list components, and are able to preserve our initial input.
+
+### List Comprehensions
+In addition to the aforementioned construction methods, list comprehensions are one of the most efficient and elegant ways we have available to us of constructing lists. If you're a serious Pythonista, you've probably seen these once or twice, but Haskell's take on them is much closer to the way that set construction is dealt with in math:
+```haskell
+> [x*2 | x <- [1..10]]
+[2,4,6,8,10,12,14,16,18,20]
+```
+
+As you can see, this takes each element within the range `[1..10]`, doubles it, and adds it to the list. We can spice this up by adding conditional predicates to this:
+```haskell
+> [x*2 | x <- [1..20], x*2 >= 12]
+[12,14,16,18,20]
+```
+
+We can further spice this up by having multiple predicates:
+```haskell
+> [x | x <- [10..20], x /= 13, x /= 15, x /= 19]
+[10,11,12,14,16,17,18,20]
+```
+
+And we can also perform comprehensions over several lists:
+```haskell
+> [ x*y | x <- [2,5,10], y <- [8,10,11]]
+[16, 20,22,40,50,55,80,100,110]
 ```
 
 ## Local Bindings
