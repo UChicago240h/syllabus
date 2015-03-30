@@ -98,4 +98,12 @@
   }
 </code>
 <p>So we've now written a method that allows us to act upon various classes, so long as they all implement the <code>Animal</code> interface.</p>
-<p>Haskell type classes work in a similar vein as Java interfaces, but piggy-back off Haskell's powerful type system to yield some amazing results. Let's consider a type class definition ripped directly from the Haskell standard library, the <code>Eq</code> type class:</p>                                                                                             </php>
+<p>Haskell type classes work in a similar vein as Java interfaces, but piggy-back off Haskell's powerful type system to yield some amazing results. Let's consider a type class definition ripped directly from the Haskell standard library, the Eq type class:</p>
+<code>
+  class Eq a where
+    (==) :: a -> a -> Bool
+    (/=) :: a -> a -> Bool
+    x == y = not (x /= y)
+    x /= y = not (x == y)
+</code>
+</php>
