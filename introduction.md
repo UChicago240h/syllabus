@@ -113,7 +113,7 @@ Let's load this and make sure it works:
 ```haskell
 > :l area.hs
 > getArea 2.0 4
->>> 20.0
+20.0
 ```
 Awesome. There's plenty more to be said for this example, but we'll leave it as is for the time being. There's plenty more to be said about Haskell's type system, much of which we'll cover down the line. Truth be told, the system is so omnipresent and powerful that a lot of beginner Haskellians spend much of their time struggling within its confines. More will be said about this type system, but for now, trust me when I say that it is worth taking the time to master this system and really understand how your types are functioning.
 
@@ -133,9 +133,9 @@ greeting _ = "I don't know you bro."
 ```haskell
 > :l greeting.hs
 > greeting "Henry"
->>> "Hey Henry, let's go drinking today!"
+"Hey Henry, let's go drinking today!"
 > greeting "Shaan"
->>> "I don't know you bro."
+"I don't know you bro."
 ```
 As you can see, we're creating instances of our function that have different behaviors upon explicitly defined input patterns. Truth be told, there's no need to be *this* explicit about our inputs: we'll see how we can have more generalizable pattern matching once we start working with lists. One thing that should be noted is the last case. We utilize the `_` character to denote a general wildcard pattern. This takes the place of an `otherwise`, or `else` pattern.
 
