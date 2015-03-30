@@ -156,7 +156,6 @@ addVectors (x1, y1) (x2 y2) = (x1 + x2, y1 + y2)
 
 Awesome. We've been able to do the same thing in a far cleaner fashion, and (more importantly) with far fewer function invocations. We can do even niftier things with pattern matching, but those will have to wait until we get to discussing lists.
 
-
 ### Guards
 Pattern matching is well and good, but oftentimes we want to have conditionals more conveniently nested in our function, rather than the top-level routing that pattern matching provides. For example, let's take a function that tells me whether or not I should stop drinking
 ```haskell
@@ -167,7 +166,33 @@ keepDrinking numDrinks
   | numDrinks < 9 = "You should probably stop"
   | otherwise     = "You should probably call an ambulance"
 ```
-Here, we're creating more explicit conditional statements that map to program outputs. Rather than the pattern matching, we're able to create conditional statements that allow for true/false evaluation within 
+Here, we're creating more explicit conditional statements that map to program outputs. Rather than the pattern matching, we're able to create conditional statements that allow for true/false evaluation within their scope and control program behavior on the basis of these conditionals.
+
+### If/Then Statements
+Haskell also does have the standard `if-then-else` structure, though it's rarely used in practice. We can see why by defining a simple function to describe characters on the basis of case and whether or not they're in the ASCII charset:
+```haskell
+describeLetter :: Char -> String
+describeLetter c =
+  if c >= 'a' && c <= 'z'
+    then "Lower case"
+    else if c >= 'A' && c <= 'Z'
+      then "Upper case"
+      else "Not an ASCII letter"
+```
+
+This is well and good, but we can simply write cleaner code with guards:
+```haskell
+describeLetter :: Char -> String
+describeLetter c =
+  | c >= 'a' && c <= 'z' = "Lower case"
+  | c >= 'A' && c <= 'Z' = "Upper case" 
+  | otherwise            = "Not an ASCII letter"
+```
+
+As you can hopefully see, this code is much cleaner, more readable, and more usable.
+
+### Case Statements
+The final piece of flow control we'll cover today is case statements. Case statements allow us to execute code blocks for specific values of a given variable. This is terrific because
 
 ### List Comprehensions
 List comprehensions are one of the most efficient ways we have available to us of constructing lists. If you're a serious Pythonista, you've probably seen these once or twice, but Haskell's take on them is much closer to the way that set construction is dealt with in math:
@@ -185,7 +210,6 @@ We can further spice this up by having multiple predicates:
 > [x | x <- [10..20], x /= 13, x /= 15, x /= 19]
 >>>[10,11,12,14,16,17,18,20]
 
-### Case Statements
 ```
 And we can also perform comprehensions over several lists:
 ```haskell
