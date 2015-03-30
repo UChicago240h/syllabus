@@ -1,56 +1,92 @@
-# Lecture 1
-## Haskell
-As all Haskell courses begin, so does this one: with the most banal description of the language possible. **Haskell is a lazy pure functional language.** What this means, I'm assuming most of you know already: if you don't, this course is probably not for you. At the highest level, this means that Haskell is very, very, very different from most programming languages that you have worked with previously. We'll get into the details of the weirdness in a bit, with much of it hopefully being familiar.
+# Lecture 1: Introduction
+## Why?
+I'd like to begin today by offering an argument for this course's existence. There is a relatively large and unreasonably vocal contingent of Haskell folks at this institution, and a relatively small and equally vocal contingent at every major technology firm, but having fans does not make something worthy of academic study (regardless of what [certain folks at this university think](http://www.nytimes.com/2011/10/31/arts/television/jersey-shore-has-its-day-at-university-of-chicago.html)). Haskell, despite its cachet in hipster cliques, does not have a noticeable footprint in the world of commerce (only [one company](https://www.sc.com/en/) that I know of has a significant amount of its codebase written in Haskell). On top of that, while many of Haskell's libraries are quite delightful, few of them are what I would call "production ready". (As an aside, if you are interested in using Haskell in production, I would recommend you watch [Bryan O'Sullivan's talk on running his Haskell-based startup](https://www.youtube.com/watch?v=ZR3Jirqk6W8).) In academia, Haskell usage is mostly limited to the programming languages sector of any given department, and even then, Haskell folks aren't particularly common. In the open-source community, there is a good amount of Haskell activity, though, yet again, few of the projects coming out of the community receive widespread adoption or even stability.
+
+So the question remains: why dedicate a large chunk of your time and effort into mastering a language that is wildly obscure and has a reputation for being completely opaque, especially when its impact is so seemingly limited? While answers like "It's cool" or "It's a lot of fun!" or (in the case of 161 students) "I need to for this degree", these answers really aren't going to cut it for this class. Over the next several months, we'll work towards constructing a more nuanced and powerful argument for Haskell's existence, but for this session, we'll turn to one of the masters. In 2007, Simon Peyton-Jones authored a [terrific paper on Haskell's history](http://research.microsoft.com/en-us/um/people/simonpj/papers/history-of-haskell/history.pdf) (it's highly recommended reading). In it, there is one line that sticks out to me: "We believe the most important legacy of Haskell will be how it influences the languages that succeed it." The grander argument that I'd like to put forth is that the ideas underlying Haskell are currently influencing the way programs are written and architected and form the backbone for the philosophy surrounding modern technology stacks. We'll fill in the details as we go along.
 
 ## Today's Goals
-Much of this first week is concerned with covering the groundwork necessary to understand the more advanced topics in class. We're making the assumption that folks here are familiar with Haskell and need no more than a refresher, so much of the material is going to be covered in a cursory fashion and a very rapid speed.
+Much of this first week is concerned with covering the groundwork necessary to jump into more advanced topics. We're making the assumption that folks here are familiar with Haskell and need no more than a refresher, so much of the material is going to be covered in a cursory fashion and a very rapid speed. Should that not be the case for you, office hours are a resource that should be taken advantage of. In addition, I'll be hosting a number of bootcamp sessions outside of regular office hours where we'll be working through my favorite technical book of all time, Miran Lipovača's peerless [Learn You a Haskell for Great Good!](http://learnyouahaskell.com/).
+
+## Haskell
+As all Haskell courses begin, so does this one: with the most banal description of the language possible. **Haskell is a lazy pure functional language with a strong, static type system.** What this means, I'm assuming most of you know already: if you don't, we'll work to rectify this outside of class. At the highest level, this means that Haskell is very, very, very different from most programming languages that you have worked with previously. We'll spent the better part of this lecture unraveling these things.
 
 ## Beginning with GHC(i)
-Our base of operations in the Haskell world is going to be the Glasgow Haskell Compiler (GHC). While there are other Haskell compilers out there, GHC is the standard and the only thing you should ever touch. Initially, as we're experimenting and refamiliarizing ourselves with the language, we're going to spend a significant amount of time in GHCi, the interpreter facility of GHC. For readers of the notes, I've denoted lines of code to be executed within GHCi as preceded by `>` and output in GHCi with `>>>`.
+Our base of operations in the Haskell world is going to be the Glasgow Haskell Compiler (GHC). While there are other Haskell compilers out there, GHC is the standard and the only thing you should ever touch. Initially, as we're experimenting and refamiliarizing ourselves with the language, we're going to spend a significant amount of time in GHCi, the interpreter facility of GHC. For readers of the notes, I've denoted lines of code to be executed within GHCi as preceded by `>` and output in GHCi with no preceding symbol.
 
 Let's begin by mucking about and defining some variables:
 ```haskell
 > let height = 5
 > let width = 10
 > width * height
->>> 50
+50
 > width - height
->>> 5
+5
 ```
 Works much as expected: nothing new to see here. More interesting is where we start going about defining functions:
 ```haskell
 > let getArea xWdith yHeight = xWidth * yHeight
 > getArea height width
->>> 50
+50
 ```
 Note that function invocation, as opposed to what most of us are used to from Algol-family languages, does not depend upon the use of parentheses, but properly-spaced function names followed by arguments. Let's go about and define a couple of slightly more robust functions:
 ```haskell
 > let isLong name = (length name) > 10
 > isLong "Jakub"
->>> False
+False
 > isLong "Balthazarius"
->>> True
+True
 ```
 
 Very cool. Just a quick word about GHCi before we go any further: the `let` keyword has a very different meaning in GHCi and in proper Haskell. In GHCi, we use `let` to define bindings that remain within the interpreter's scope for the duration of the session. We use this for both variables and functions. In proper Haskell, `let` is used in a very different way to denote local name bindings. We'll cover this latter use in a bit.
 
 ## Types
-Haskell's type system is simultaneously its most powerful and most irritating feature. Type safety allows us to write hugely robust programs, but often at the expense of accessibility to n00bz. If you have not already, you will spend a significant amount of time tearing your hair out over type signatures. Let's take begin previous example, which we'll put in a file called *area.hs*:
+Haskell's type system is simultaneously its most powerful and most irritating feature for newcomers. Type safety allows us to write hugely robust programs, but often at the expense of accessibility to n00bz.
+
+In order to get ourselves mentally prepared to accept Haskell's type system, let's take a moment and rip on less well-designed languages. Let's talk about JavaScript. Let's try a couple of exercises. JavaScript, a dynamically typed language, allows us to do all kinds of shenanigans with basic arithmetic operators. Some of these are actually pretty nifty:
+```javascript
+$ node
+> 'a' * 16
+'aaaaaaaaaaaaaaaa'
+```
+But our experimentation quickly leads us down some ugly roads. Take adding two empty arrays:
+```javascript
+> [] + []
+''
+```
+So adding two arrays gives as empty string. That doesn't seem right.... But one of the core properties of addition is commutativity, i.e. $a + b = b + a$. Hence, adding an array to an object should give us the same result, regardless of the addition order:
+```javascript
+> [] + {}
+'[object Object]'
+> {} + []
+0
+```
+Right. As we can see, JavaScript's unfortunate brand of dynamic typing provides us with some unexpected behavior. (While I hold no opinions on Brendan Eich's politics, I do have a pretty poor opinion of him as a language designer.) While this behavior can be pretty funny (see [Gary Bernhardt's lightning talk for proof](https://www.destroyallsoftware.com/talks/wat)), this becomes a huge issue when trying in debugging and ensuring the security application. Take it from someone who has spent hours trying to figure out the return type of a Python function: types matter.
+
+But to those of us used to running rampant with a forgiving type system, Haskell's type system presents an unusual challenge. Let's begin affirming this by trying some of the above shenanigans in GHCi:
+```haskell
+> 'a' * 3
+No instance for (Num Char) arising from a use of ‘*’
+  In the expression: 'a' * 3
+  In an equation for ‘it’: it = 'a' * 3
+```
+While Haskell's errors are generally just left of incomprehensible, this one's pretty clear: you can't multiply `Char`s and `Int`s. This brings us to our first lesson: Haskell does not allow for function overloading that allows for wildly disparate behavior and return types across a variety of function inputs. Haskell approaches generic programming in a much more disciplined and effective way, which will explore in due time.
+
+Haskell's type system also allows for clear and effective use of code as documentation. Let's take our previosu function defintion example, which we'll put in a file called *area.hs*:
 ```haskell
 -- area.hs
 getArea :: Int -> Int -> Int
 getArea width height = width * height
 ```
-Here we've defined the getArea function as before, but with the addition of a type signature. Type signatures provide an explicit type restrictions for function inputs and outputs. While the compiler can usually infer types for basic functions, type signatures provide an added layer readability for folks reading your code down the road and are critical for more advaned programs. They can also become a huge liability if not done properly. Let's load this file into GHCi and give it a whirl:
+Here we've defined the getArea function as before, but with the addition of a type signature. Type signatures provide an explicit type restrictions for function inputs and outputs. While the compiler can usually infer types for basic functions, type signatures provide an added layer readability for folks reading your code down the road and are critical for more advanced programs. They can also become a huge liability if not done properly. Let's load what we've written into GHCi and give it a whirl:
 ```haskell
 > :l area.hs
 > getArea 4 5
->>> 20
+20
 ```
 This works as before, but the limitations of what we've written become apparent very quickly:
 ```haskell
 > getArea 4.0 8
->>> INCOMPREHENSIBLE ERROR MESSAGE
+INCOMPREHENSIBLE ERROR MESSAGE
 ```
 This is obviously not something we want. It should only make sense that our `getArea` function should be able to handle floating point numbers, but we've defined our function signature to handle only integers. To fix this issue, let's try removing method signature and reloading our function:
 ```haskell
@@ -60,12 +96,12 @@ getArea width height = width * height
 ```haskell
 > :l area.hs
 > getArea 4 5.0
->>> 20.0
+20.0
 ```
-This is mysterious. By simply removing the type signature, something that we've created a function that works on previously failing data types and is somehow more robust than our previous, virtually identical function. Let's investigate why
+This is mysterious. By simply removing the type signature, something that we've created a function that works on previously failing inputs and is somehow more robust than our previous, virtually identical function. Let's investigate why:
 ```haskell
 > :t getArea
->>> getArea :: Num a => a -> a -> a
+getArea :: Num a => a -> a -> a
 ```
 Interesting. The interpreter has assessed the type of our function to be quite different from what initially profiled it as. The core is the same: you're working with a function taking in two arguments of the same type and returning an argument of the same type: `a -> a -> a`. But while our previous types were strictly defined as integers, GHCi has has reprofiled these types as generics. The only restriction upon these types is denoted by `Num a =>`, which means that all of these variables must be of the `Num` typeclass (more on these later). This means that all types that could be considered numbers and obey certain laws that the Haskell compiler places upon Nums are admissible in both the arguments and ouput. We can go ahead and use this information to amend our previous function defintion:
 ```haskell
