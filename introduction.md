@@ -374,7 +374,19 @@ def fibonacci_memo(n):
 As you can see, the entire memoization procedure depends upon our mutation of a globally-accessible data structure. While this is all well and good, we really can't do this in Haskell, thus forcing us to be a more creative. Before we can make this happen, we need to look back and recall the `map` function.
 
 ## Map
-One of the beautiful things about Haskell is how we can utilize higher-order functions. In most imperative languages that we're familiar with, functions only go so far as their explicit definition, and are extensible only to the extent of their type signatures, if even that. Haskell allows us a whole host of magical capacities to play with functions. The first of these is the ability to curry functions, that is to create partially applied functions. As a result of this, we can create functions that are effectively function generators:
+One of the beautiful things about Haskell is how we can utilize higher-order functions. In most imperative languages that we're familiar with, functions only go so far as their explicit definition, and are extensible only to the extent of their type signatures, if even that. Haskell allows us a whole host of magical capacities to play with functions. The first of these is the ability to curry functions, that is to create partially applied functions. As a result of this, we can create functions that are effectively function generators. Let's first consider our run-of-the-mill multiplication function:
+```haskell
+> :t (*)
+Num a => a -> a -> a
+```
+So we have a function that takes in two numerical inputs and returns a numerical output of the same type. But we can also take a look at a partially applied function:
+```haskell
+> :t (*2)
+Num a => a -> a 
+```
+
+We've now defined a multiplication function that takes in only one input. We can set this function to an identifier and deploy it readily:
+
 ```haskell
 mulFunc :: Num a => a -> a -> a
 mulFunc a = (* a)
@@ -383,12 +395,14 @@ mulFunc a = (* a)
 > double 4
 8
 ```
-Awesome, so we can create functions that generate more functions. Now, let's say we want to take this function and apply it to multiple arguments within a list. In order to make this happen, we can create a function that takes in said list and function, and sequentially applies the function to each element within the list. As such, we can write a map function in the canonical Haskell way:
+
+Awesome, so we can create partially applied functions that generate more functions. Now, let's say we want to take this function and apply it to multiple arguments within a list. In order to make this happen, we can create a function that takes in said list and function, and sequentially applies the function to each element within the list. As such, we can write a map function in the canonical Haskell way:
 ```haskell
 map :: (a -> b) -> [a] -> [b]
 map _ [] = []
 map f (x:xs) = f x : map f xs
-```
+``
+`
 For those of you that haven't seen this before, note that all we're doing is pattern matching and generating sequential recursive applications via list decomposition. As far as using this, let's say we wanted to take a list and double all elements within it:
 ```haskell
 > map (*2) [2..10]
@@ -457,12 +471,12 @@ def pow(base, power):
 ```
 Due to recursive halving of the power, we're able to get this runtime down to `O(log n)` runtime. Now, let's combine this with our initial insight about exploiting matrix multiplication to get a close-to-ideal version of fibonacci:
 
-First, we need to define a matrix datatype. We can easily do this by way of Haskell's ability to define datatypes:
+Unfortunately, matrices are not a primitive type in Haskell, or necessarily something that can be obviously described in terms of primitive types (such as a 2-d array). Haskell does allow us to define data types and deploy them readily. Let's define a data type constructor that defines a 2x2 matrix:
 ```haskell
 data GL2 = GL2 Integer Integer Integer Integer
 ```
 
-Now, let's define a matrix multiplication routine:
+Now that we've defined this matrix datatype, we can use it as a type in our function signatures. Let's use this to define a matrix multiplication routine:
 ```haskell
 mul :: GL2 -> GL2 -> GL2
 mul (GL2 a b c d) (GL2 e f g h) = GL2 (a*e+b*g) (a*f+b*h) (c*e+d*g) (c*f+d*h)
