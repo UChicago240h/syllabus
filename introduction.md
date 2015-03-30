@@ -1,4 +1,7 @@
 # Lecture 1: Introduction
+## Credit Where Credit Is Due
+Many of the examples in this lecture are taken verbatim from Miran Lipovaca's Learn You A Haskell For Great Good. While I have reached out to the author for retroactive permission in including these examples in the lecture notes that are going up online, I'd like to also encourage all students and readers of these notes to go ahead and purchase the book. It's the best investment a budding Haskellian can make.
+
 ## Why?
 I'd like to begin today by offering an argument for this course's existence. There is a relatively large and unreasonably vocal contingent of Haskell folks at this institution, and a relatively small and equally vocal contingent at every major technology firm, but having fans does not make something worthy of academic study (regardless of what [certain folks at this university think](http://www.nytimes.com/2011/10/31/arts/television/jersey-shore-has-its-day-at-university-of-chicago.html)). Haskell, despite its cachet in hipster cliques, does not have a noticeable footprint in the world of commerce (only [one company](https://www.sc.com/en/) that I know of has a significant amount of its codebase written in Haskell). On top of that, while many of Haskell's libraries are quite delightful, few of them are what I would call "production ready". (As an aside, if you are interested in using Haskell in production, I would recommend you watch [Bryan O'Sullivan's talk on running his Haskell-based startup](https://www.youtube.com/watch?v=ZR3Jirqk6W8).) In academia, Haskell usage is mostly limited to the programming languages sector of any given department, and even then, Haskell folks aren't particularly common. In the open-source community, there is a good amount of Haskell activity, though, yet again, few of the projects coming out of the community receive widespread adoption or even stability.
 
@@ -118,35 +121,41 @@ Let's load this and make sure it works:
 Awesome. There's plenty more to be said for this example, but we'll leave it as is for the time being. There's plenty more to be said about Haskell's type system, much of which we'll cover down the line. Truth be told, the system is so omnipresent and powerful that a lot of beginner Haskellians spend much of their time struggling within its confines. More will be said about this type system, but for now, trust me when I say that it is worth taking the time to master this system and really understand how your types are functioning.
 
 ## Control Flow
-Haskell's take on control flow far outstrips what we're used to seeing with the standard Algol-family *if-then-else* constructs. Haskell provides us with a number of takes on control flow that encompass function overloading, case statements, and the standard *if-then* constructs that we're used to. Let's jump in with pattern matching.
+Haskell's take on control flow far outstrips what we're used to seeing with the standard Algol-family *if-then-else* constructs. Haskell provides us with a number of takes on control flow that encompass pattern matching, case statements, and the standard *if-then* constructs that we're used to. Let's jump in with guards.
 
 ### Pattern Matching
 Haskell's pattern matching capabilities may be most analogous for most folks to Java's function overloading capabilities, but in reality are far more similar to the list deconstruction capabilities found in Lisp (i.e. Common Lisp, Racket, Scheme, Clojure, etc.). Let's take a look by defining a greeting function which properly handles folks we know, dislike, and don't know:
 ```haskell
 -- greeting.hs
 greeting :: String -> String
-greeting "Henry" = "Hey Henry, let's go drinking today!"
-greeting "Hazel" = "Hey Hazel, are we actually working on OS today?"
-greeting "Laura" = "Hey Laura, we should just probably start that project today!"
-greeting _ = "I don't know you bro."
+greeting "Pete" = "Hey Pete, let's go drinking today!"
+greeting "John" = "Hey John, are we actually working on compilers today?"
+greeting "Kurtz" = "Professor, the dog ate my homework!"
+greeting _ = "Hello, stranger!"
 ```
 ```haskell
 > :l greeting.hs
-> greeting "Henry"
-"Hey Henry, let's go drinking today!"
+> greeting "Pete"
+"Hey Pete, let's go drinking today!"
 > greeting "Shaan"
-"I don't know you bro."
+"Hello, stranger!"
 ```
 As you can see, we're creating instances of our function that have different behaviors upon explicitly defined input patterns. Truth be told, there's no need to be *this* explicit about our inputs: we'll see how we can have more generalizable pattern matching once we start working with lists. One thing that should be noted is the last case. We utilize the `_` character to denote a general wildcard pattern. This takes the place of an `otherwise`, or `else` pattern.
 
-We can use this in a slightly smarter way. Let's say we wanted to pattern-match for individuals whose names start with an 'S', simply so we can ostracize them. We can do this using a clever pattern-matching construct:
+Let's see another quick example using tuples. We want to define a function that adds two sets of tuples, with addition going element-wise. Without pattern matching, we would get something like this:
 ```haskell
--- ostracize.hs
-ostracize :: String -> String
-ostracize ('S':_) = "Only fools have a name that starts with S!"
-ostracize ('J':_) = "Ha! John? Jacob? Jingleheimer? More like Jerk!"
-ostracize _ = "I don't have time for you bro."
+addVectors :: (Double, Double) -> (Double, Double) -> (Double, Double)
+addVectors a b = (fst a + fst b, snd a + snd b)
 ```
+
+With pattern matching, we can write this in a mutch better way:
+```haskell
+addVectors :: (Double, Double) -> (Double, Double) -> (Double, Double)
+addVectors (x1, y1) (x2 y2) = (x1 + x2, y1 + y2)
+```
+
+Awesome. We've been able to do the same thing in a far cleaner fashion, and (more importantly) with far fewer function invocations. We can do even niftier things with pattern matching, but those will have to wait until we get to discussing lists.
+
 
 ### Guards
 Pattern matching is well and good, but oftentimes we want to have conditionals more conveniently nested in our function, rather than the top-level routing that pattern matching provides. For example, let's take a function that tells me whether or not I should stop drinking
@@ -175,6 +184,8 @@ We can further spice this up by having multiple predicates:
 ```haskell
 > [x | x <- [10..20], x /= 13, x /= 15, x /= 19]
 >>>[10,11,12,14,16,17,18,20]
+
+### Case Statements
 ```
 And we can also perform comprehensions over several lists:
 ```haskell
@@ -196,6 +207,15 @@ Awesome. Let's now construct this list in a completely different way, using the 
 >>> [4,8,15,16,23,42]
 ```
 As we can see here, lists are really successive applications of a binary, left-associative appending operator, thus suggesting that much of our list traversal is going to involve peeling elements from the beginning of a list, rather than the iterative type of traversal.
+
+We can use this in a slightly smarter way. Let's say we wanted to pattern-match for individuals whose names start with an 'S', simply so we can ostracize them. We can do this using a clever pattern-matching construct:
+```haskell
+-- ostracize.hs
+ostracize :: String -> String
+ostracize ('S':_) = "Only fools have a name that starts with S!"
+ostracize ('J':_) = "Ha! John? Jacob? Jingleheimer? More like Jerk!"
+ostracize _ = "I don't have time for you bro."
+```
 
 ## Local Bindings
 While the Haskell way is to prevent data from being assigned to temporary placeholders, sometimes we do need to alias certain data points to keep our code clean. Take the following example:
